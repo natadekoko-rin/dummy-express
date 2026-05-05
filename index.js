@@ -1,3 +1,18 @@
+// Load environment variables first
+require('dotenv').config();
+
+// Validate required environment variables
+const BASEURL = process.env.BASEURL;
+
+if (!BASEURL) {
+  console.error('❌ Missing required environment variable: BASEURL');
+  process.exit(1);
+}
+
+// Extract port from BASEURL
+const url = new URL(BASEURL);
+const PORT = url.port || 1000;
+
 const express = require('express');
 const app = express();
 
@@ -22,9 +37,8 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Start server
-const PORT = process.env.PORT || 3000;
+// Configuration
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
-  console.log(`📊 Health check endpoint: GET http://localhost:${PORT}/api/health`);
+  console.log(`🚀 Server running on ${BASEURL}`);
+  console.log(`📊 Health check endpoint: GET ${BASEURL}/api/health`);
 });
